@@ -70,49 +70,7 @@ link_all_units<- function(units.run,
   if( pbl_trim & is.null( pbl.height))
     stop( "pbl.height must be provided if pbl_trim == TRUE")
 
-  zips_link_parallel <- function(unit) {
-    linked_zips <- parallel::mclapply(
-      year.mons,
-      disperseR::disperser_link_zips,
-      unit = unit,
-      pbl.height = pbl.height,
-      crosswalk. = crosswalk.,
-      duration.run.hours = duration.run.hours,
-      overwrite = overwrite,
-      res.link. = res.link,
-      mc.cores = mc.cores,
-      pbl. = pbl.trim,
-      return.linked.data. = return.linked.data
-    )
 
-    linked_zips <- data.table::rbindlist(Filter(is.data.table, linked_zips))
-    message(paste("processed unit", unit$ID, ""))
-
-    linked_zips[, month := as( month, 'character')]
-    return(linked_zips)
-  }
-
-  counties_link_parallel <- function(unit) {
-    linked_counties <- parallel::mclapply(
-      year.mons,
-      disperseR::disperser_link_counties,
-      unit = unit,
-      pbl.height = pbl.height,
-      counties = counties.,
-      duration.run.hours = duration.run.hours,
-      overwrite = overwrite,
-      res.link. = res.link,
-      mc.cores = mc.cores,
-      pbl. = pbl.trim,
-      return.linked.data. = return.linked.data
-    )
-
-    linked_counties <- data.table::rbindlist(Filter(is.data.table, linked_counties))
-    message(paste("processed unit", unit$ID, ""))
-
-    linked_counties[, month := as( month, 'character')]
-    return(linked_counties)
-  }
 
   grids_link_parallel <- function(unit) {
     linked_grids <- parallel::mclapply(
@@ -138,14 +96,11 @@ link_all_units<- function(units.run,
 
   units.run <- unique( units.run[, .( uID, ID)])
 
-  if( link.to == 'zips')
-    out <- units.run[, zips_link_parallel(.SD), by = seq_len(nrow(units.run))]
-  if( link.to == 'counties')
-    out <- units.run[, counties_link_parallel(.SD), by = seq_len(nrow(units.run))]
+
   if( link.to == 'grids')
     out <- units.run[, grids_link_parallel(.SD), by = seq_len(nrow(units.run))]
 
-  out[, comb := paste("month: ", out[, month], " unitID :", out[, ID], sep = "")]
-  out[, seq_len := NULL]
+  # out[, comb := paste("month: ", out[, month], " unitID :", out[, ID], sep = "")]
+  # out[, seq_len := NULL]
   return(out)
 }
