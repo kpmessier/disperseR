@@ -37,7 +37,7 @@ hysplit_dispersion <- function(lat = 49.263,
   # config files
   if (!("SETUP.CFG" %in% list.files()) |
       !("ASCDATA.CFG" %in% list.files())) {
-    disperseR::hysplit_config_init(run_dir)
+    hysplit_config_init(run_dir)
   }
 
   # Set number of particles to 1 in the SETUP.CFG file
@@ -255,7 +255,7 @@ hysplit_dispersion <- function(lat = 49.263,
     nc = 2)),
     nm = c("file", "available"))
 
-  if (any(c("mac", "unix") %in%  disperseR::get_os())) {
+  if (any(c("mac", "unix") %in%  get_os())) {
     for (k in 1:length(met)) {
       met_file_df[k, 1] <- met[k]
       met_file_df[k, 2] <- as.character( file.exists(paste0(met_dir, "/", met[k])))
@@ -288,7 +288,7 @@ hysplit_dispersion <- function(lat = 49.263,
     }
   }
 
-  if (disperseR::get_os() == "win") {
+  if (get_os() == "win") {
 
     for (k in 1:length(met)) {
       met_file_df[k, 1] <- met[k]
@@ -519,7 +519,7 @@ hysplit_dispersion <- function(lat = 49.263,
   # CONTROL file is now complete and in the
   # working directory; execute the model run
 
-  if (disperseR::get_os() == "mac") {
+  if (get_os() == "mac") {
     system(paste0("(cd ", run_dir, " && ",
       system.file("osx/hycs_std",
         package = "SplitR"),
@@ -528,7 +528,7 @@ hysplit_dispersion <- function(lat = 49.263,
 
 
 
-  if (disperseR::get_os() == "unix") {
+  if (get_os() == "unix") {
     system(paste0("(cd ",  run_dir, " && ",
       system.file("linux-amd64/hycs_std",
         package = "SplitR"),
@@ -537,7 +537,7 @@ hysplit_dispersion <- function(lat = 49.263,
   }
 
   ### finish these paths:
-  if (disperseR::get_os() == "win") {
+  if (get_os() == "win") {
     shell(paste0("(cd \"", run_dir, "\" && \"",
       system.file("win/hycs_std.exe",
         package = "SplitR"),
@@ -546,21 +546,21 @@ hysplit_dispersion <- function(lat = 49.263,
 
 
   # Extract the particle positions at every hour
-  if (disperseR::get_os() == "mac") {
+  if (get_os() == "mac") {
     system(paste0("(cd ", run_dir, "/", " && ",
       system.file("osx/parhplot",
         package = "SplitR"),
       " -iPARDUMP -a1)"))
   }
 
-  if (disperseR::get_os() == "unix") {
+  if (get_os() == "unix") {
     system(paste0("(cd ", run_dir, "/", " && ",
       system.file("linux-amd64/parhplot",
         package = "SplitR"),
       " -iPARDUMP -a1)"))
   }
 
-  if (disperseR::get_os() == "win") {
+  if (get_os() == "win") {
     shell(paste0("(cd \"", run_dir, "\" && \"",
       system.file("win/parhplot.exe",
         package = "SplitR"),
@@ -568,7 +568,7 @@ hysplit_dispersion <- function(lat = 49.263,
   }
 
   # Remove the .att files from the working directory
-  if (any(c("mac", "unix") %in%  disperseR::get_os())) {
+  if (any(c("mac", "unix") %in%  get_os())) {
     system(paste0("(cd ", run_dir,
       " && rm GIS_part*.att)"))
   }
@@ -584,7 +584,7 @@ hysplit_dispersion <- function(lat = 49.263,
       " && rm parhplot.ps)"))
   }
 
-  if ( disperseR::get_os() == "win") {
+  if ( get_os() == "win") {
     shell(paste0("(cd \"", run_dir,
       "\" && del parhplot.ps)"))
   }
@@ -641,7 +641,7 @@ hysplit_dispersion <- function(lat = 49.263,
   #     ")"))
   # }
   #
-  # if (disperseR::get_os() == "win") {
+  # if (get_os() == "win") {
   #
   #   if (is.null(disp_name)) {
   #     folder_name <-
@@ -671,11 +671,11 @@ hysplit_dispersion <- function(lat = 49.263,
   # it is requested
   if (write_disp_CSV) {
     disp_df <-
-      disperseR::dispersion_read(archive_folder = run_dir)
+      dispersion_read(archive_folder = run_dir)
           # paste0(hysp_dir, "/",
           #   folder_name))
 
-    if (any(c("mac", "unix") %in% disperseR::get_os())) {
+    if (any(c("mac", "unix") %in% get_os())) {
       write.table(
         disp_df,
         file = file.path(run_dir, #"/", #hysp_dir, "/",
@@ -685,7 +685,7 @@ hysplit_dispersion <- function(lat = 49.263,
         row.names = FALSE)
     }
 
-    if (disperseR::get_os() == "win") {
+    if (get_os() == "win") {
       write.table(
         disp_df,
         file = file.path( run_dir, #hysp_dir, "/",

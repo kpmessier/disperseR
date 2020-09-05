@@ -56,6 +56,7 @@ download_file <- function(url, file, dir) {
 
 get_data <-
   function(data,
+           dir = dir,
     start.year = NULL,
     start.month = NULL,
     end.year = NULL,
@@ -74,20 +75,21 @@ get_data <-
 
       ### Crosswalk
       message("Reading in the crosswalk data from disperseR")
-      crosswalk <- disperseR::crosswalk
+      load(paste0(dir,"crosswalk.rda"))
       assign("crosswalk", crosswalk, envir = .GlobalEnv)
       message("   Assigned to crosswalk variable")
 
       ### PP.units.monthly1995_2017
       message("Reading in the PP.units.monthly1995_2017 data from disperseR")
-      PP.units.monthly1995_2017 <- disperseR::PP.units.monthly1995_2017
+      load(paste0(dir,"PP.units.monthly1995_2017.RData"))
       assign("PP.units.monthly1995_2017", PP.units.monthly1995_2017, envir = .GlobalEnv)
       message("   Assigned to PP.units.monthly1995_2017 variable")
 
       ### PP.units.monthly1995_2017
 
       message("Reading in the zipcodecoordinate data from disperseR")
-      zipcodecoordinate <- disperseR::zipcodecoordinate
+      load(paste0(dir,"zipcodecoordinate.rda"))
+      
       assign("zipcodecoordinate", zipcodecoordinate, envir = .GlobalEnv)
       message("   Assigned to zipcodecoordinate variable")
 
@@ -190,7 +192,7 @@ get_data <-
         if (length(metfiles) > 0) {
           message("   Downloading the following files:")
           message(metfiles)
-          disperseR::get_met_reanalysis(files = metfiles, path_met_files = meteo_dir)
+          get_met_reanalysis(files = metfiles, path_met_files = meteo_dir)
         }
         if (length(metfiles) == 0) {
           message("   No files to download. Requested files already available")
@@ -208,7 +210,7 @@ get_data <-
         zcta <-
           merge(
             zcta,
-            disperseR::crosswalk,
+            crosswalk,
             by = "ZCTA",
             all = F,
             allow.cartesian = TRUE
@@ -269,7 +271,7 @@ get_data <-
       if (length(metfiles) > 0) {
         message("Downloading the following files:")
         message(metfiles)
-        disperseR::get_met_reanalysis(files = metfiles, path_met_files = meteo_dir)
+        get_met_reanalysis(files = metfiles, path_met_files = meteo_dir)
       }
       if (length(metfiles) == 0) {
         message("No files to download. Requested files already available")
@@ -295,7 +297,7 @@ get_data <-
       zcta <-
         merge(
           zcta,
-          disperseR::crosswalk,
+          crosswalk,
           by = "ZCTA",
           all = F,
           allow.cartesian = TRUE

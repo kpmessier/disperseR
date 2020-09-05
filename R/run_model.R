@@ -34,7 +34,7 @@ run_model <- function(model, npart = 2500, run.dir) {
 
   if (inherits(model, "disp_model")) {
     disp_df <-
-      disperseR::hysplit_dispersion(
+      hysplit_dispersion(
         ## uses change hysplit_dispersion
         lat = model$lat,
         lon = model$lon,

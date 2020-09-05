@@ -6,7 +6,7 @@
 #'
 #'
 #'
-#' @param units.run information on unit locations as output from disperseR::units()
+#' @param units.run information on unit locations as output from units()
 #'
 #' @param start.date this argument is not necessary, but can be used if the user is interested in specifying a specific date to start the analysis with as opposed to using months. For example `start.date="2005-01-02"` for 2 January 2005. This argument are set to `NULL` by default and the function computes the start and the end dates using the `year.mons` provided.
 #'
@@ -75,7 +75,7 @@ link_all_units<- function(units.run,
   grids_link_parallel <- function(unit) {
     linked_grids <- parallel::mclapply(
       year.mons,
-      disperseR::disperser_link_grids,
+      disperser_link_grids,
       unit = unit,
       pbl.height = pbl.height,
       duration.run.hours = duration.run.hours,
